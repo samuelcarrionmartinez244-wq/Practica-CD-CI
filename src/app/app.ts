@@ -15,6 +15,7 @@ export class App {
   protected readonly gastos = inject(Gastos);
 
   anadir(g: NuevoGasto): void {
-    this.gastos.agregar(g.concepto, g.importe, g.categoria);
+    // Error a propósito: el servicio no tiene el método nuevoGasto
+    this.gastos.nuevoGasto(g.concepto, g.importe, g.categoria);
   }
 }
