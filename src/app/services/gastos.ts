@@ -38,4 +38,24 @@ export class Gastos {
       .filter((g) => g.categoria === categoria)
       .reduce((suma, g) => suma + g.importe, 0);
   }
+
+  // Métodos nuevos SIN tests: bajan la cobertura por debajo del umbral
+  editarImporte(id: number, importe: number): void {
+    if (!(importe > 0)) {
+      return;
+    }
+    this._gastos.update((lista) => lista.map((g) => (g.id === id ? { ...g, importe } : g)));
+  }
+
+  mayorGasto(): Gasto | null {
+    const lista = this._gastos();
+    if (lista.length === 0) {
+      return null;
+    }
+    return lista.reduce((max, g) => (g.importe > max.importe ? g : max));
+  }
+
+  gastosDeCategoria(categoria: Categoria): Gasto[] {
+    return this._gastos().filter((g) => g.categoria === categoria);
+  }
 }
