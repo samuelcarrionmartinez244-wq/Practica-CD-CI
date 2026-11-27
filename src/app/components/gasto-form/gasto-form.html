@@ -1,0 +1,28 @@
+<form class="gasto-form" (submit)="$event.preventDefault(); enviar()">
+  <input
+    class="concepto"
+    type="text"
+    placeholder="Concepto"
+    aria-label="Concepto"
+    [value]="concepto()"
+    (input)="concepto.set($any($event.target).value)"
+  />
+  <input
+    class="importe"
+    type="text"
+    inputmode="decimal"
+    placeholder="Importe €"
+    aria-label="Importe"
+    [value]="importe()"
+    (input)="importe.set($any($event.target).value)"
+  />
+  <select aria-label="Categoría" [value]="categoria()" (change)="categoria.set($any($event.target).value)">
+    @for (c of categorias; track c) {
+      <option [value]="c">{{ c }}</option>
+    }
+  </select>
+  <button type="submit">Añadir</button>
+</form>
+@if (error()) {
+  <p class="error" role="alert">{{ error() }}</p>
+}

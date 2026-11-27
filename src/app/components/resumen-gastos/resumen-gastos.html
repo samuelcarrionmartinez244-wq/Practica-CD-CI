@@ -1,0 +1,20 @@
+@if (gastos().length === 0) {
+  <p class="vacio">Todavía no has apuntado ningún gasto.</p>
+} @else {
+  <table class="tabla">
+    <thead>
+      <tr><th>Concepto</th><th>Categoría</th><th class="num">Importe</th><th></th></tr>
+    </thead>
+    <tbody>
+      @for (g of gastos(); track g.id) {
+        <tr>
+          <td>{{ g.concepto }}</td>
+          <td><span class="chip">{{ g.categoria }}</span></td>
+          <td class="num">{{ formatear(g.importe) }}</td>
+          <td><button class="eliminar" type="button" (click)="eliminar.emit(g.id)" aria-label="Eliminar gasto">🗑</button></td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}
+<p class="total">Total: <strong>{{ formatear(total()) }}</strong></p>

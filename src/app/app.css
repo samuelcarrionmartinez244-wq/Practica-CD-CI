@@ -1,0 +1,6 @@
+.pagina { max-width: 680px; margin: 3rem auto; padding: 0 1rem; }
+header { margin-bottom: 1.25rem; }
+h1 { margin: 0; font-size: 2rem; color: #1c1917; }
+.autor { margin: .3rem 0 0; color: #78716c; }
+.panel { background: #fff; border-radius: 12px; padding: 1.25rem; border: 1px solid #e7e5e4; }
+footer { color: #a8a29e; font-size: .85rem; margin-top: 1.25rem; }

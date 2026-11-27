@@ -1,0 +1,15 @@
+<main class="pagina">
+  <header>
+    <h1>{{ titulo }}</h1>
+    <p class="autor">Práctica CI/CD · Samuel Carrión Martínez · 2º DAW</p>
+  </header>
+  <section class="panel">
+    <app-gasto-form (nuevoGasto)="anadir($event)" />
+    <app-resumen-gastos
+      [gastos]="gastos.gastos()"
+      [total]="gastos.total()"
+      (eliminar)="gastos.eliminar($event)"
+    />
+  </section>
+  <footer>Publicado con GitHub Actions en GitHub Pages</footer>
+</main>

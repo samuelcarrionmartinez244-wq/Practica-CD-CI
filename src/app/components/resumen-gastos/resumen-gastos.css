@@ -1,0 +1,8 @@
+.vacio { color: #78716c; text-align: center; padding: 1rem 0; }
+.tabla { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+th, td { padding: .5rem .3rem; border-bottom: 1px solid #e7e5e4; text-align: left; }
+th { font-size: .8rem; text-transform: uppercase; color: #78716c; }
+.num { text-align: right; }
+.chip { background: #ede9fe; color: #5b21b6; border-radius: 999px; padding: .1rem .55rem; font-size: .8rem; }
+.eliminar { border: 0; background: transparent; cursor: pointer; }
+.total { text-align: right; font-size: 1.1rem; margin: 1rem 0 0; }
