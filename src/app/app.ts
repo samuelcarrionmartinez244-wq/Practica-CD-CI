@@ -12,7 +12,7 @@ import { Gastos } from './services/gastos';
 })
 export class App {
   protected readonly titulo = 'Control de gastos v2 💸';
-  protected readonly gastos = inject(Gastos10);
+  protected readonly gastos = inject(Gastos);
 
   anadir(g: NuevoGasto): void {
     this.gastos.agregar(g.concepto, g.importe, g.categoria);
