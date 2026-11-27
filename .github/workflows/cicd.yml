@@ -1,0 +1,79 @@
+# Pipeline de CI/CD para la aplicación Angular
+name: Angular CI/CD
+
+# on: cuándo se ejecuta el workflow.
+#  - pull_request contra main -> solo CI (tests + compilación), sin publicar.
+#  - push a main (p. ej. al fusionar una PR) -> CI y después despliegue (CD).
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+# Evita dos despliegues a la vez en Pages; si llega uno nuevo, el anterior en cola se descarta.
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: false
+
+# jobs: trabajos que forman el pipeline.
+jobs:
+  # ---------- CI ----------
+  build:
+    runs-on: ubuntu-latest        # máquina virtual limpia de GitHub
+    # permissions: mínimo necesario, solo leer el código del repositorio.
+    permissions:
+      contents: read
+    steps:
+      - name: Descargar código
+        uses: actions/checkout@v4
+
+      - name: Instalar Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm              # reutiliza la caché de npm entre ejecuciones
+
+      - name: Instalar dependencias
+        run: npm ci               # instala exactamente lo que dice package-lock.json
+
+      - name: Tests unitarios con cobertura mínima
+        # Modo no interactivo. Si un test falla o la cobertura queda por debajo
+        # de los umbrales de karma.conf.js (80 % / 70 % ramas), el job falla.
+        run: npx ng test --no-watch --no-progress --browsers=ChromeHeadlessCI --code-coverage
+
+      - name: Subir informe de cobertura
+        if: always()              # se sube aunque fallen los tests, para poder revisarlo
+        uses: actions/upload-artifact@v4
+        with:
+          name: informe-cobertura
+          path: coverage/
+
+      - name: Compilar Angular
+        # Si hay un error de compilación este paso falla y el job también.
+        run: npx ng build --base-href /Practica-CD-CI/
+
+      - name: Subir artefacto para GitHub Pages
+        # if: solo en push (en una PR no se publica nada).
+        if: github.event_name == 'push'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/practica-ci-cd/browser
+
+  # ---------- CD ----------
+  deploy:
+    # needs: solo empieza cuando build ha terminado bien.
+    needs: build
+    # if: solo cuando el evento es un push a main.
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    # permissions: publicar en Pages y obtener el token OIDC que exige deploy-pages.
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Desplegar en GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
