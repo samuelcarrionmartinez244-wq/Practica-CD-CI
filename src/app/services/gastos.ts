@@ -15,9 +15,8 @@ export class Gastos {
   private readonly _gastos = signal<Gasto[]>([]);
 
   readonly gastos = this._gastos.asReadonly();
-  readonly total = computed(() =>
-    Math.round(this._gastos().reduce((suma, g) => suma + g.importe, 0) * 100) / 100
-  );
+  // Bug a propósito: sin redondear, 0.1 + 0.2 da 0.30000000000000004
+  readonly total = computed(() => this._gastos().reduce((suma, g) => suma + g.importe, 0));
 
   agregar(concepto: string, importe: number, categoria: Categoria): Gasto | null {
     const texto = concepto.trim();
