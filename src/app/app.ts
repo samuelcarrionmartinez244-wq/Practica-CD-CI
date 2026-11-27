@@ -11,7 +11,7 @@ import { Gastos } from './services/gastos';
   styleUrl: './app.css'
 })
 export class App {
-  protected readonly titulo = 'Control de gastos';
+  protected readonly titulo = 'Control de gastos v2 💸';
   protected readonly gastos = inject(Gastos);
 
   anadir(g: NuevoGasto): void {
